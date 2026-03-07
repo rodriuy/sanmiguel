@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0B3D91">
+    <meta name="description" content="La Canchita San Miguel F5 - Cancha de fútbol 5 techada en Pando, Canelones, Uruguay">
+    <title>La Canchita San Miguel F5 - Reserva Tu Cancha</title>
+    <link rel="icon" type="image/png" href="sanmiguel.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#0B3D91;--primary-light:#1a5fc0;--secondary:#F5C800;
+            --dark:#0a0e27;--light:#f8f9fa;--text:#1a1a1a;--muted:#666;
+            --r:12px;--ease:all 0.3s cubic-bezier(.4,0,.2,1)
+        }
+        html{scroll-behavior:smooth}
+        body{font-family:'Barlow Condensed',sans-serif;color:var(--text);background:var(--light);overflow-x:hidden}
+
+        /* ── NAVBAR ── */
+        .navbar{
+            position:fixed;top:0;left:0;right:0;z-index:1000;
+            padding:.8rem 2rem;
+            /* FIX #1: fondo siempre visible para que los links no sean invisibles */
+            background:rgba(11,61,145,.8);
+            backdrop-filter:blur(10px);
+            border-bottom:1px solid rgba(245,200,0,.2);
+            transition:var(--ease)
+        }
+        .navbar.scrolled{
+            background:rgba(11,61,145,.97);
+            border-bottom-color:rgba(245,200,0,.5);
+            box-shadow:0 4px 24px rgba(11,61,145,.4)
+        }
+        .nav-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+        .nav-logo{display:flex;align-items:center;gap:.6rem;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--secondary);letter-spacing:1px;transition:var(--ease)}
+        .nav-logo:hover{transform:scale(1.04)}
+        /* FIX #2: logo sin fondo negro usando mix-blend-mode */
+        .nav-logo img{height:36px;width:36px;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.15)}
+        .nav-menu{display:flex;gap:2rem;list-style:none}
+        /* FIX #3: links blancos desde el inicio, no gris #666 sobre azul */
+        .nav-menu a{color:rgba(255,255,255,.9);text-decoration:none;font-weight:700;font-size:.9rem;letter-spacing:1px;text-transform:uppercase;transition:color .2s;position:relative}
+        .nav-menu a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--secondary);transition:width .3s}
+        .nav-menu a:hover::after{width:100%}
+        .nav-menu a:hover{color:var(--secondary)}
+        .nav-toggle{display:none;background:none;border:none;color:var(--secondary);font-size:1.4rem;cursor:pointer}
+
+        /* ── HERO ── */
+        .hero{
+            position:relative;height:100vh;min-height:600px;
+            display:flex;align-items:center;justify-content:center;
+            overflow:hidden;
+            background:linear-gradient(135deg,#071F4A 0%,var(--primary) 55%,var(--primary-light) 100%)
+        }
+        /* textura de campo */
+        .hero::before{
+            content:'';position:absolute;inset:0;
+            background:
+                repeating-linear-gradient(0deg,transparent,transparent 58px,rgba(255,255,255,.025) 58px,rgba(255,255,255,.025) 60px),
+                repeating-linear-gradient(90deg,transparent,transparent 58px,rgba(255,255,255,.025) 58px,rgba(255,255,255,.025) 60px);
+            z-index:0
+        }
+        .hero-particles{position:absolute;inset:0;z-index:1;pointer-events:none}
+        .particle{position:absolute;border-radius:50%;background:rgba(245,200,0,.55);animation:floatUp linear infinite}
+        @keyframes floatUp{
+            from{transform:translateY(105vh) scale(1);opacity:0}
+            10%{opacity:1}90%{opacity:.5}
+            to{transform:translateY(-10vh) translateX(50px) scale(.1);opacity:0}
+        }
+        /* logo decorativo derecha */
+        .hero-logo-deco{
+            position:absolute;right:5%;top:50%;transform:translateY(-50%);
+            width:clamp(180px,26vw,380px);opacity:.13;pointer-events:none;z-index:1;
+            mix-blend-mode:screen;filter:brightness(2) saturate(.2);
+            animation:logoFloat 4s ease-in-out infinite
+        }
+        @keyframes logoFloat{0%,100%{transform:translateY(-50%)}50%{transform:translateY(calc(-50% - 14px))}}
+        .hero-body{position:relative;z-index:2;text-align:center;color:#fff;max-width:740px;padding:2rem}
+        .hero-badge{
+            display:inline-block;background:rgba(245,200,0,.12);border:1px solid rgba(245,200,0,.4);
+            color:var(--secondary);font-size:.78rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+            padding:5px 16px;border-radius:100px;margin-bottom:.9rem;animation:fadeD .6s ease both
+        }
+        @keyframes fadeD{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+        .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,9vw,6rem);line-height:.95;letter-spacing:3px;animation:fadeD .7s .1s ease both}
+        .hero-title .yellow{color:var(--secondary)}
+        /* efecto glitch sutil */
+        .glitch{position:relative;display:inline-block}
+        .glitch::before,.glitch::after{content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%}
+        .glitch::before{animation:g1 5s infinite;color:var(--secondary);z-index:-1;clip-path:polygon(0 30%,100% 30%,100% 55%,0 55%)}
+        .glitch::after{animation:g2 5s infinite;color:rgba(100,180,255,.5);z-index:-2;clip-path:polygon(0 60%,100% 60%,100% 75%,0 75%)}
+        @keyframes g1{0%,88%,100%{transform:none;opacity:0}91%{transform:translate(-3px,0);opacity:1}94%{transform:translate(3px,0);opacity:1}96%{opacity:0}}
+        @keyframes g2{0%,88%,100%{transform:none;opacity:0}92%{transform:translate(4px,2px);opacity:1}95%{transform:translate(-2px,-1px);opacity:1}97%{opacity:0}}
+        .hero-sub{font-size:clamp(.9rem,2.5vw,1.2rem);color:rgba(255,255,255,.7);margin:1rem 0 1.8rem;letter-spacing:2px;text-transform:uppercase;animation:fadeD .7s .2s ease both}
+        .hero-stats{display:flex;justify-content:center;gap:2.5rem;margin-bottom:2rem;flex-wrap:wrap;animation:fadeD .7s .3s ease both}
+        .hs-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--secondary);line-height:1}
+        .hs-lbl{font-size:.72rem;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px}
+        .hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeD .7s .4s ease both}
+
+        /* ── BUTTONS ── */
+        .btn{padding:.85rem 2rem;border:2px solid var(--secondary);border-radius:var(--r);font-size:.95rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;transition:var(--ease);font-family:'Barlow Condensed',sans-serif;text-decoration:none;display:inline-block}
+        .btn-p{background:var(--secondary);color:var(--primary)}
+        .btn-p:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(245,200,0,.35);background:#ffe033}
+        .btn-s{background:transparent;color:var(--secondary)}
+        .btn-s:hover{background:var(--secondary);color:var(--primary);transform:translateY(-3px)}
+
+        /* ── SECTIONS ── */
+        .sw{padding:88px 2rem;max-width:1200px;margin:0 auto}
+        .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3rem);text-align:center;margin-bottom:3rem;letter-spacing:2px;text-transform:uppercase}
+        .section-title::after{content:'';display:block;width:68px;height:4px;background:var(--secondary);margin:.7rem auto 0;border-radius:2px}
+
+        /* ── TURNOS 3D FLIP ── */
+        .turnos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1.5rem;perspective:1200px}
+        .turno-card{height:370px;cursor:pointer;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.68,-.55,.265,1.55)}
+        .turno-card:hover{transform:rotateY(180deg)}
+        .tf,.tb{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--r);padding:2rem;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 6px 24px rgba(11,61,145,.1)}
+        .tf{background:#fff;border-top:4px solid var(--secondary)}
+        .tb{transform:rotateY(180deg);background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff}
+        .t-hora{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--primary);letter-spacing:1px}
+        .tb .t-hora{color:var(--secondary)}
+        .t-disp{display:flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--muted);margin-top:.3rem}
+        .tb .t-disp{color:rgba(255,255,255,.7)}
+        .t-precio{display:flex;align-items:flex-end;gap:.3rem}
+        .t-val{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--secondary);line-height:1}
+        .t-div{font-size:.85rem;color:var(--muted);margin-bottom:.25rem}
+        .t-lbl{font-size:.75rem;color:var(--muted);margin-bottom:.2rem}
+        .t-feats{list-style:none;margin:1rem 0}
+        .t-feats li{color:rgba(255,255,255,.85);margin-bottom:.5rem;font-size:.9rem;display:flex;align-items:center;gap:.5rem}
+        .t-feats li::before{content:'✓';color:var(--secondary);font-weight:900}
+
+        /* ── GALERÍA ── */
+        .gal-bg{background:#eef2fb;padding:4px 0}
+        .galeria-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:190px;gap:1rem}
+        .galeria-item{position:relative;overflow:hidden;border-radius:var(--r)}
+        .galeria-item:nth-child(1){grid-column:span 2;grid-row:span 2}
+        .galeria-item:nth-child(5){grid-column:span 2}
+        .gal-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;transition:transform .4s ease}
+        .galeria-item:hover .gal-inner{transform:scale(1.06)}
+        .gal-inner i{font-size:2.2rem;color:rgba(245,200,0,.5)}
+        .gal-inner span{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:rgba(255,255,255,.65)}
+        .gal-img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;display:block;position:absolute;inset:0}
+        .galeria-item:hover .gal-img{transform:scale(1.07)}
+        .gal-pending{font-size:.7rem;color:rgba(255,255,255,.4);letter-spacing:1px;margin-top:.5rem;font-family:'Barlow Condensed',sans-serif;font-style:italic}
+        .gal-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(11,61,145,.95) 0%,transparent 55%);display:flex;align-items:flex-end;padding:1.2rem;opacity:0;transition:opacity .3s}
+        .galeria-item:hover .gal-ov{opacity:1}
+        .gal-t{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#fff;letter-spacing:1px}
+        .gal-d{font-size:.8rem;color:rgba(255,255,255,.7);margin-top:.2rem}
+
+        /* ── TESTIMONIOS ── */
+        .test-bg{background:linear-gradient(135deg,#eef2ff,#fffde7);padding:90px 2rem}
+        .test-inner{max-width:1200px;margin:0 auto}
+        .test-track{position:relative;max-width:660px;margin:0 auto;min-height:350px}
+        .testimonio{position:absolute;width:100%;opacity:0;transform:translateX(55px);transition:all .45s ease;pointer-events:none}
+        .testimonio.active{opacity:1;transform:none;pointer-events:auto}
+        .testimonio.out{opacity:0;transform:translateX(-55px)}
+        .tcard{background:#fff;padding:2.5rem 2rem 2rem;border-radius:var(--r);box-shadow:0 6px 28px rgba(11,61,145,.1);text-align:center;border-top:4px solid var(--secondary);margin-top:36px}
+        .tavatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));margin:-44px auto 1rem;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#fff;box-shadow:0 4px 14px rgba(11,61,145,.25)}
+        .tstars{color:var(--secondary);font-size:1.1rem;letter-spacing:3px;margin-bottom:1rem}
+        .ttext{font-size:.95rem;line-height:1.75;color:var(--muted);font-style:italic;margin-bottom:1.2rem}
+        .tautor{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--primary);letter-spacing:1px}
+        .tdots{display:flex;justify-content:center;gap:.6rem;margin-top:2rem}
+        .tdot{width:10px;height:10px;border-radius:50%;background:rgba(11,61,145,.2);cursor:pointer;border:none;transition:var(--ease)}
+        .tdot.active{background:var(--secondary);transform:scale(1.4)}
+
+        /* ── TORNEOS ── */
+        .torneos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(295px,1fr));gap:1.5rem}
+        .torneo-card{background:#fff;border-radius:var(--r);padding:2rem;box-shadow:0 4px 18px rgba(11,61,145,.08);position:relative;overflow:hidden;transition:var(--ease)}
+        .torneo-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--primary),var(--secondary),var(--primary));background-size:200%;animation:shimmer 2.5s infinite}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .torneo-card:hover{transform:translateY(-8px);box-shadow:0 16px 40px rgba(11,61,145,.14)}
+        .torneo-nombre{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--primary);margin-bottom:.5rem;letter-spacing:1px}
+        .torneo-fecha{display:flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.88rem;margin-bottom:1.2rem}
+        .torneo-fecha i{color:var(--secondary)}
+        .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1.2rem}
+        .cd-item{background:#eef2fb;border-radius:8px;padding:.8rem .4rem;text-align:center}
+        .cd-val{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:var(--primary);line-height:1}
+        .cd-lbl{font-size:.62rem;text-transform:uppercase;color:var(--muted);letter-spacing:1px;margin-top:.2rem}
+        .torneo-cuota{font-size:.88rem;color:var(--muted);margin-bottom:1rem}
+        .torneo-cuota-val{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--primary)}
+
+        /* ── CONTACTO ── */
+        .contacto-bg{background:var(--dark);padding:90px 2rem}
+        .contacto-inner{max-width:1200px;margin:0 auto}
+        .contacto-inner .section-title{color:#fff}
+        .contacto-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:2.5rem;align-items:start}
+        .cinfo{display:flex;flex-direction:column;gap:1.2rem}
+        .ci-row{display:flex;align-items:flex-start;gap:1rem}
+        .ci-icon{width:40px;height:40px;background:rgba(245,200,0,.1);border:1px solid rgba(245,200,0,.3);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--secondary);flex-shrink:0}
+        .ci-lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--secondary);margin-bottom:3px}
+        .ci-val{color:rgba(255,255,255,.8);font-size:.9rem;line-height:1.5}
+        .ci-val a{color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s}
+        .ci-val a:hover{color:var(--secondary)}
+        /* FIX #4: coordenadas correctas de Pando, Av. 18 de Julio */
+        .mapa{border-radius:var(--r);overflow:hidden;height:330px;border:2px solid rgba(245,200,0,.2);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+        .mapa iframe{width:100%;height:100%;border:none;filter:saturate(.55) brightness(.7)}
+
+        /* ── FOOTER ── */
+        footer{background:#04080f;color:rgba(255,255,255,.45);text-align:center;padding:1.8rem;font-size:.82rem;border-top:1px solid rgba(245,200,0,.12)}
+        footer span{color:var(--secondary)}
+
+        /* ── WHATSAPP ── */
+        .wa{position:fixed;bottom:26px;right:26px;width:60px;height:60px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;cursor:pointer;z-index:999;text-decoration:none;animation:wap 2.5s infinite;transition:transform .2s}
+        .wa:hover{transform:scale(1.12)}
+        @keyframes wap{0%,100%{box-shadow:0 6px 26px rgba(37,211,102,.4)}50%{box-shadow:0 6px 40px rgba(37,211,102,.7)}}
+        .wa-tip{position:absolute;bottom:108%;right:0;background:#fff;padding:.75rem 1rem;border-radius:10px;width:186px;font-size:.8rem;line-height:1.45;box-shadow:0 6px 22px rgba(0,0,0,.14);opacity:0;transform:translateY(8px);pointer-events:none;transition:var(--ease);text-align:left;color:var(--text)}
+        .wa-tip strong{display:block;color:var(--primary);margin-bottom:.3rem;font-size:.85rem}
+        .wa-tip::after{content:'';position:absolute;top:100%;right:18px;border:6px solid transparent;border-top-color:#fff}
+        .wa:hover .wa-tip{opacity:1;transform:none}
+
+        /* ── REVEAL ── */
+        .reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
+        .reveal.visible{opacity:1;transform:none}
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px){
+            .contacto-grid{grid-template-columns:1fr}
+            .galeria-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
+            .galeria-item:nth-child(1){grid-column:span 2;grid-row:span 1}
+            .galeria-item:nth-child(5){grid-column:span 1}
+        }
+        @media(max-width:600px){
+            .nav-menu{display:none;position:absolute;top:56px;left:0;right:0;flex-direction:column;background:rgba(11,61,145,.98);padding:1rem 0;gap:0}
+            .nav-menu.open{display:flex}
+            .nav-menu li{padding:.7rem 2rem}
+            .nav-toggle{display:block}
+            .hero-cta{flex-direction:column;align-items:center}
+            .btn{width:230px;text-align:center}
+            .galeria-grid{grid-template-columns:1fr}
+            .galeria-item:nth-child(1),.galeria-item:nth-child(5){grid-column:span 1}
+            .countdown{grid-template-columns:repeat(2,1fr)}
+            .hero-logo-deco{display:none}
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a class="nav-logo" href="#">
+            <img src="sanmiguel.png" alt="SM F5" onerror="this.style.display='none'">
+            <span>San Miguel F5</span>
+        </a>
+        <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#turnos">Turnos</a></li>
+            <li><a href="#galeria">Galería</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#torneos">Torneos</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-particles" id="particles"></div>
+    <img class="hero-logo-deco" src="sanmiguel.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+    <div class="hero-body">
+        <div class="hero-badge">⚽ Pando, Canelones · Uruguay</div>
+        <h1 class="hero-title">
+            <span class="glitch" data-text="LA CANCHITA">LA CANCHITA</span><br>
+            <span class="yellow">San Miguel</span>
+        </h1>
+        <p class="hero-sub">Fútbol 5 techada · Todo clima · Todo el año</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hs-num" id="statTurnos">0</div>
+                <div class="hs-lbl">Turnos hoy</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hs-num">100%</div>
+                <div class="hs-lbl">Techada</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hs-num">5vs5</div>
+                <div class="hs-lbl">Cancha full</div>
+            </div>
+        </div>
+        <div class="hero-cta">
+            <a href="#turnos" class="btn btn-p">Reservar cancha</a>
+            <a href="#contacto" class="btn btn-s">Contactanos</a>
+        </div>
+    </div>
+</div>
+
+<!-- TURNOS Y PRECIOS -->
+<div class="sw" id="turnos">
+    <h2 class="section-title">Turnos y Tarifas</h2>
+    <p style="text-align:center;color:var(--muted);margin-top:-2rem;margin-bottom:2rem;font-size:.9rem;">Pasá el mouse sobre cada card para ver detalles y reservar</p>
+    <div class="turnos-grid">
+
+        <div class="turno-card reveal">
+            <div class="tf">
+                <div>
+                    <div class="t-hora">08:00 – 09:00</div>
+                    <div class="t-disp"><i class="fas fa-check-circle" style="color:#25D366"></i> Disponible</div>
+                </div>
+                <div>
+                    <div class="t-lbl">por turno</div>
+                    <div class="t-precio"><span class="t-val">600</span><span class="t-div">UYU</span></div>
+                </div>
+            </div>
+            <div class="tb">
+                <div>
+                    <div class="t-hora">Turno mañana</div>
+                    <ul class="t-feats">
+                        <li>Cancha sintética cubierta</li>
+                        <li>Vestuarios disponibles</li>
+                        <li>Estacionamiento</li>
+                        <li>Ducha incluida</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%208:00%20a%209:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
+            </div>
+        </div>
+
+        <div class="turno-card reveal">
+            <div class="tf">
+                <div>
+                    <div class="t-hora">10:00 – 11:00</div>
+                    <div class="t-disp"><i class="fas fa-check-circle" style="color:#25D366"></i> Disponible</div>
+                </div>
+                <div>
+                    <div class="t-lbl">por turno</div>
+                    <div class="t-precio"><span class="t-val">700</span><span class="t-div">UYU</span></div>
+                </div>
+            </div>
+            <div class="tb">
+                <div>
+                    <div class="t-hora">Turno mañana</div>
+                    <ul class="t-feats">
+                        <li>Cancha sintética cubierta</li>
+                        <li>Vestuarios disponibles</li>
+                        <li>Estacionamiento</li>
+                        <li>Ducha incluida</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2010:00%20a%2011:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
+            </div>
+        </div>
+
+        <div class="turno-card reveal">
+            <div class="tf">
+                <div>
+                    <div class="t-hora">18:00 – 19:00</div>
+                    <div class="t-disp"><i class="fas fa-circle" style="color:var(--secondary);font-size:.7rem"></i> 1 reserva</div>
+                </div>
+                <div>
+                    <div class="t-lbl">por turno</div>
+                    <div class="t-precio"><span class="t-val">850</span><span class="t-div">UYU</span></div>
+                </div>
+            </div>
+            <div class="tb">
+                <div>
+                    <div class="t-hora">Turno nocturno</div>
+                    <ul class="t-feats">
+                        <li>Iluminación LED profesional</li>
+                        <li>Vestuarios disponibles</li>
+                        <li>Estacionamiento</li>
+                        <li>Ducha incluida</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2018:00%20a%2019:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
+            </div>
+        </div>
+
+        <div class="turno-card reveal">
+            <div class="tf">
+                <div>
+                    <div class="t-hora">20:00 – 21:00</div>
+                    <div class="t-disp"><i class="fas fa-check-circle" style="color:#25D366"></i> Disponible</div>
+                </div>
+                <div>
+                    <div class="t-lbl">por turno</div>
+                    <div class="t-precio"><span class="t-val">900</span><span class="t-div">UYU</span></div>
+                </div>
+            </div>
+            <div class="tb">
+                <div>
+                    <div class="t-hora">Turno nocturno</div>
+                    <ul class="t-feats">
+                        <li>Iluminación LED profesional</li>
+                        <li>Vestuarios disponibles</li>
+                        <li>Estacionamiento</li>
+                        <li>Ducha incluida</li>
+                    </ul>
+                </div>
+                <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2020:00%20a%2021:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- GALERÍA -->
+<div class="gal-bg" id="galeria">
+<div class="sw">
+    <h2 class="section-title">Nuestras Instalaciones</h2>
+    <div class="galeria-grid">
+
+        <div class="galeria-item reveal">
+            <img class="gal-img" src="https://scontent.fmvd3-1.fna.fbcdn.net/v/t51.82787-15/514634124_17856393972459863_5061692841422894229_n.webp?stp=dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=13d280&_nc_ohc=QodTsLzYvc0Q7kNvwGbX-FO&_nc_oc=AdmycLYDNE0BOJdwOknzRuOGoLDO8t34AfC8eX3AZq4XyyNHl0TsHh8i9rDZzREySmXlPy0VvqkitMTVDuvAkzW2&_nc_zt=23&_nc_ht=scontent.fmvd3-1.fna&_nc_gid=GKsol9FU93cpe3r3S6WWyA&_nc_ss=8&oh=00_Afz1y82aOLiNVFQZHwYkJ-dKWcrZcOpS9x-TBeEBX1mGOw&oe=69B11004" alt="Cancha Principal">
+            <div class="gal-ov"><div><div class="gal-t">Cancha Principal</div><div class="gal-d">Superficie sintética, techada, todo clima</div></div></div>
+        </div>
+
+        <div class="galeria-item reveal">
+            <img class="gal-img" src="https://scontent.fmvd2-2.fna.fbcdn.net/v/t51.75761-15/496893762_17849420970459863_8122552806612079748_n.webp?stp=dst-jpg_tt6&_nc_cat=111&ccb=1-7&_nc_sid=13d280&_nc_ohc=vBJz5m-RJKQQ7kNvwHyIaqW&_nc_oc=AdkCIUN4Oi-MB2JeQLJDfVw3N7bPqDtPCQXB_vKg3BzwlvXUj-8Z6ikBRXuPMxu_zEsoJEHDb-vkC0QC-ydd93Af&_nc_zt=23&_nc_ht=scontent.fmvd2-2.fna&_nc_gid=Ocj072AaJRzUegoUPbeTBg&_nc_ss=8&oh=00_Afyi-7WEPCLkPlRLvunVe_4abO7YkINmoa4AhJJkeky9gQ&oe=69B0FF64" alt="Tribunas">
+            <div class="gal-ov"><div><div class="gal-t">Tribunas</div><div class="gal-d">Bancos para espectadores y suplentes</div></div></div>
+        </div>
+
+        <div class="galeria-item reveal" style="background:linear-gradient(135deg,#1a3a6e,var(--primary))">
+            <div class="gal-inner"><i class="fas fa-fire"></i><span>Parrillero</span><small class="gal-pending">📷 Foto próximamente</small></div>
+            <div class="gal-ov"><div><div class="gal-t">Salón + Parrillero</div><div class="gal-d">Para el tercer tiempo y eventos privados</div></div></div>
+        </div>
+
+        <div class="galeria-item reveal">
+            <img class="gal-img" src="https://scontent.fmvd4-1.fna.fbcdn.net/v/t51.82787-15/529839237_17860349397459863_7947957045675085196_n.webp?stp=dst-jpg_tt6&_nc_cat=110&ccb=1-7&_nc_sid=13d280&_nc_ohc=xY7v7AyseAIQ7kNvwFmTLq6&_nc_oc=Adn4P5BMH2GhhTbizcHeh-zzoL8kGX1B6b50EgzmeSYU2SpJGaAVQS7yMi_ncP0q5bH1gp-gwLCdB_rCKhO7KrBv&_nc_zt=23&_nc_ht=scontent.fmvd4-1.fna&_nc_gid=7yZMnA_yUhBjvooYaAFOoA&_nc_ss=8&oh=00_AfyqAyahq1EOgbeTGGMgB2XSWpNWnMlwPrZ_y8Q5P_BF6Q&oe=69B10BE3" alt="Cantina">
+            <div class="gal-ov"><div><div class="gal-t">Cantina</div><div class="gal-d">Bebidas frías, snacks y pizza artesanal</div></div></div>
+        </div>
+
+        <div class="galeria-item reveal">
+            <img class="gal-img" src="https://scontent.fmvd1-1.fna.fbcdn.net/v/t51.82787-15/531720600_17861034510459863_5688769728617026947_n.webp?stp=dst-jpg_tt6&_nc_cat=103&ccb=1-7&_nc_sid=13d280&_nc_ohc=2Cc7BTkQ1awQ7kNvwGaCBoB&_nc_oc=AdkSX3ydCczDrXGmpe65KKlA785-LBkvnWaiQ3VJMncw7dEVYVZgcq5qh7bkblz_2kMzP3iAeVrQ1usOU1z-gjZP&_nc_zt=23&_nc_ht=scontent.fmvd1-1.fna&_nc_gid=sZTOjjn2Z94KMR7DloS8xQ&_nc_ss=8&oh=00_AfwWrZ9EMCcH4m4a3nKp3f_Mz_q_Uj0BYkdh_6cpnvaGiQ&oe=69B10C44" alt="Torneos">
+            <div class="gal-ov"><div><div class="gal-t">Torneos y Eventos</div><div class="gal-d">Ligas locales y jornadas con música en vivo</div></div></div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<!-- TESTIMONIOS -->
+<div class="test-bg" id="testimonios">
+    <div class="test-inner">
+        <h2 class="section-title">Qué dice la gente</h2>
+        <div class="test-track">
+            <div class="testimonio active">
+                <div class="tcard">
+                    <div class="tavatar">JM</div>
+                    <div class="tstars">★★★★★</div>
+                    <p class="ttext">"La mejor cancha de la zona. Instalaciones impecables y precios accesibles. Vengo cada fin de semana con mis pibes."</p>
+                    <div class="tautor">Juan Martínez · Pando</div>
+                </div>
+            </div>
+            <div class="testimonio">
+                <div class="tcard">
+                    <div class="tavatar">MR</div>
+                    <div class="tstars">★★★★★</div>
+                    <p class="ttext">"Hicimos el cumpleaños de mi hijo acá y fue un éxito total. El salón con parrillero es una joya, muy recomendable."</p>
+                    <div class="tautor">María Rodríguez · Canelones</div>
+                </div>
+            </div>
+            <div class="testimonio">
+                <div class="tcard">
+                    <div class="tavatar">CP</div>
+                    <div class="tstars">★★★★★</div>
+                    <p class="ttext">"Que esté techada hace toda la diferencia. Jugamos igual con lluvia, tormenta o lo que sea. Imprescindible en Pando."</p>
+                    <div class="tautor">Carlos Pereira · Pando</div>
+                </div>
+            </div>
+            <div class="testimonio">
+                <div class="tcard">
+                    <div class="tavatar">LP</div>
+                    <div class="tstars">★★★★★</div>
+                    <p class="ttext">"Llevo 2 años viniendo todos los jueves. El ambiente del tercer tiempo con el parrillero no tiene precio. Una joya."</p>
+                    <div class="tautor">Luis Ponce · Pando</div>
+                </div>
+            </div>
+        </div>
+        <div class="tdots" id="tdots"></div>
+    </div>
+</div>
+
+<!-- TORNEOS -->
+<div class="sw" id="torneos">
+    <h2 class="section-title">Próximos Torneos</h2>
+    <div class="torneos-grid">
+        <div class="torneo-card reveal">
+            <div class="torneo-nombre">⚡ Torneo Relámpago</div>
+            <div class="torneo-fecha"><i class="fas fa-calendar-alt"></i> 12 de Marzo, 2026 · 18:00 hs</div>
+            <div class="countdown" id="cd1"></div>
+            <div class="torneo-cuota">Por equipo: <span class="torneo-cuota-val">$1.800 UYU</span></div>
+            <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20inscribirme%20al%20Torneo%20Relámpago" target="_blank" class="btn btn-p" style="width:100%;text-align:center;display:block">Inscribirse</a>
+        </div>
+        <div class="torneo-card reveal">
+            <div class="torneo-nombre">🌙 Liga Viernes Noche</div>
+            <div class="torneo-fecha"><i class="fas fa-calendar-alt"></i> 14 de Marzo, 2026 · 20:00 hs</div>
+            <div class="countdown" id="cd2"></div>
+            <div class="torneo-cuota">Por equipo: <span class="torneo-cuota-val">$2.500 UYU</span></div>
+            <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20inscribirme%20a%20la%20Liga%20Viernes%20Noche" target="_blank" class="btn btn-p" style="width:100%;text-align:center;display:block">Inscribirse</a>
+        </div>
+        <div class="torneo-card reveal">
+            <div class="torneo-nombre">🏆 Campeonato Otoño</div>
+            <div class="torneo-fecha"><i class="fas fa-calendar-alt"></i> 21 de Marzo, 2026 · 19:00 hs</div>
+            <div class="countdown" id="cd3"></div>
+            <div class="torneo-cuota">Por equipo: <span class="torneo-cuota-val">$3.000 UYU</span></div>
+            <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20inscribirme%20al%20Campeonato%20Otoño" target="_blank" class="btn btn-p" style="width:100%;text-align:center;display:block">Inscribirse</a>
+        </div>
+    </div>
+</div>
+
+<!-- CONTACTO -->
+<div class="contacto-bg" id="contacto">
+    <div class="contacto-inner">
+        <h2 class="section-title">Encontranos</h2>
+        <div class="contacto-grid">
+            <div class="cinfo">
+                <div class="ci-row">
+                    <div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <div class="ci-lbl">Dirección</div>
+                        <div class="ci-val">Av. 18 de Julio y Lorenzo Carnelli<br>Pando, Canelones, Uruguay</div>
+                    </div>
+                </div>
+                <div class="ci-row">
+                    <div class="ci-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div>
+                        <div class="ci-lbl">WhatsApp / Llamadas</div>
+                        <div class="ci-val"><a href="tel:096105993">096 105 993</a></div>
+                    </div>
+                </div>
+                <div class="ci-row">
+                    <div class="ci-icon"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <div class="ci-lbl">Horarios</div>
+                        <div class="ci-val">Lun–Vie: 07:00 – 23:00<br>Sáb: 08:00 – 23:00<br>Dom: 10:00 – 22:00</div>
+                    </div>
+                </div>
+                <div class="ci-row">
+                    <div class="ci-icon"><i class="fab fa-instagram"></i></div>
+                    <div>
+                        <div class="ci-lbl">Instagram</div>
+                        <div class="ci-val"><a href="https://instagram.com/lacanchitasanmiguelf5" target="_blank">@lacanchitasanmiguelf5</a></div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIX #5: coordenadas reales de Pando, zona Av. 18 de Julio -->
+            <div class="mapa">
+                <iframe
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=-56.0270,-34.7195,-56.0145,-34.7105&layer=mapnik&marker=-34.7152,-56.0208"
+                    loading="lazy"
+                    title="La Canchita San Miguel F5 - Pando, Canelones">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 La Canchita San Miguel F5 · Pando, Canelones · Hecho con <span>❤</span> por Ta!</p>
+</footer>
+
+<!-- WHATSAPP FLOTANTE -->
+<a class="wa" href="https://wa.me/59896105993?text=Hola!%20Me%20interesa%20reservar%20en%20La%20Canchita%20San%20Miguel%20F5" target="_blank" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+    <div class="wa-tip"><strong>💬 ¿Reservás?</strong>Escribinos y te confirmamos disponibilidad al toque.</div>
+</a>
+
+<script>
+// NAVBAR
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 60));
+document.getElementById('navToggle').addEventListener('click', () =>
+    document.getElementById('navMenu').classList.toggle('open'));
+document.querySelectorAll('#navMenu a').forEach(a =>
+    a.addEventListener('click', () => document.getElementById('navMenu').classList.remove('open')));
+
+// PARTÍCULAS
+(function(){
+    const c = document.getElementById('particles');
+    const n = innerWidth > 768 ? 42 : 16;
+    for(let i=0;i<n;i++){
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const s = Math.random()*3+2;
+        p.style.cssText = `left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${Math.random()*4+3}s;animation-delay:${Math.random()*4}s`;
+        c.appendChild(p);
+    }
+})();
+
+// CONTADOR HERO
+(function(){
+    const el = document.getElementById('statTurnos');
+    let n=0; const t=setInterval(()=>{ el.textContent=++n; if(n>=12) clearInterval(t); },110);
+})();
+
+// COUNTDOWN
+function makeCD(id){ document.getElementById(id).innerHTML=['Días','Hs','Min','Seg'].map(l=>`<div class="cd-item"><div class="cd-val">00</div><div class="cd-lbl">${l}</div></div>`).join(''); }
+['cd1','cd2','cd3'].forEach(makeCD);
+function runCD(id, ds){
+    const vals = document.getElementById(id).querySelectorAll('.cd-val');
+    const tick = ()=>{
+        const d = new Date(ds)-Date.now();
+        if(d<=0){ vals.forEach(v=>v.textContent='00'); return; }
+        [Math.floor(d/86400000),Math.floor(d%86400000/3600000),Math.floor(d%3600000/60000),Math.floor(d%60000/1000)].forEach((v,i)=>vals[i].textContent=String(v).padStart(2,'0'));
+    };
+    tick(); setInterval(tick,1000);
+}
+runCD('cd1','March 12, 2026 18:00:00');
+runCD('cd2','March 14, 2026 20:00:00');
+runCD('cd3','March 21, 2026 19:00:00');
+
+// TESTIMONIOS
+(function(){
+    const items = document.querySelectorAll('.testimonio');
+    const dotsEl = document.getElementById('tdots');
+    let cur = 0;
+    items.forEach((_,i)=>{
+        const b = document.createElement('button');
+        b.className='tdot'+(i===0?' active':'');
+        b.onclick=()=>go(i);
+        dotsEl.appendChild(b);
+    });
+    function go(next){
+        items[cur].classList.remove('active'); items[cur].classList.add('out');
+        setTimeout(()=>items[cur].classList.remove('out'), 450);
+        cur=next; items[cur].classList.add('active');
+        document.querySelectorAll('.tdot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+    }
+    setInterval(()=>go((cur+1)%items.length),6000);
+})();
+
+// SCROLL REVEAL
+const ro = new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*75); ro.unobserve(e.target); } });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{ const t=document.querySelector(a.getAttribute('href')); if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); } });
+});
+</script>
+</body>
+</html>
