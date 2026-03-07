@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0B3D91">
     <meta name="description" content="La Canchita San Miguel F5 - Cancha de fútbol 5 techada en Pando, Canelones, Uruguay">
     <title>La Canchita San Miguel F5 - Reserva Tu Cancha</title>
-    <link rel="icon" type="image/png" href="sanmiguel.png">
+    <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -216,21 +216,101 @@
         /* ── RESPONSIVE ── */
         @media(max-width:900px){
             .contacto-grid{grid-template-columns:1fr}
-            .galeria-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}
+            .mapa{height:280px}
+            .galeria-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
             .galeria-item:nth-child(1){grid-column:span 2;grid-row:span 1}
-            .galeria-item:nth-child(5){grid-column:span 1}
+            .galeria-item:nth-child(5){grid-column:span 2}
+            .turnos-grid{grid-template-columns:repeat(2,1fr)}
         }
         @media(max-width:600px){
-            .nav-menu{display:none;position:absolute;top:56px;left:0;right:0;flex-direction:column;background:rgba(11,61,145,.98);padding:1rem 0;gap:0}
+            .navbar{padding:.7rem 1.2rem}
+            .nav-logo{font-size:1.2rem}
+            .nav-logo img{height:30px;width:30px}
+            .nav-menu{
+                display:none;position:fixed;
+                top:0;left:0;right:0;bottom:0;
+                flex-direction:column;justify-content:center;align-items:center;
+                background:rgba(7,20,60,.97);
+                backdrop-filter:blur(16px);
+                gap:0;z-index:999
+            }
             .nav-menu.open{display:flex}
-            .nav-menu li{padding:.7rem 2rem}
-            .nav-toggle{display:block}
-            .hero-cta{flex-direction:column;align-items:center}
-            .btn{width:230px;text-align:center}
-            .galeria-grid{grid-template-columns:1fr}
-            .galeria-item:nth-child(1),.galeria-item:nth-child(5){grid-column:span 1}
-            .countdown{grid-template-columns:repeat(2,1fr)}
+            .nav-menu li{padding:0;width:100%;text-align:center}
+            .nav-menu a{display:block;padding:1.1rem 2rem;font-size:1.5rem;letter-spacing:3px;border-bottom:1px solid rgba(245,200,0,.08)}
+            .nav-menu a::after{display:none}
+            .nav-toggle{display:block;z-index:1001;position:relative}
+            .hero{height:100svh;min-height:580px}
             .hero-logo-deco{display:none}
+            .hero-body{padding:1.2rem}
+            .hero-badge{font-size:.7rem;letter-spacing:2px;padding:4px 14px}
+            .hero-title{font-size:clamp(2.8rem,16vw,4.5rem);letter-spacing:1px}
+            .hero-sub{font-size:.85rem;letter-spacing:1px;margin:.6rem 0 1.4rem}
+            .hero-stats{
+                gap:0;background:rgba(255,255,255,.06);
+                border:1px solid rgba(245,200,0,.15);border-radius:12px;
+                padding:.8rem 0;margin-bottom:1.4rem;
+                display:grid;grid-template-columns:repeat(3,1fr)
+            }
+            .hero-stat{padding:.4rem .5rem;border-right:1px solid rgba(245,200,0,.15)}
+            .hero-stat:last-child{border-right:none}
+            .hs-num{font-size:1.6rem}
+            .hs-lbl{font-size:.6rem;letter-spacing:.5px}
+            .hero-cta{flex-direction:column;align-items:stretch;gap:.7rem;padding:0 .5rem}
+            .btn{width:100%;text-align:center;padding:.9rem 1rem;font-size:1rem}
+            .sw{padding:52px 1.2rem}
+            .test-bg{padding:52px 1.2rem}
+            .contacto-bg{padding:52px 1.2rem}
+            .section-title{font-size:1.9rem;margin-bottom:2rem}
+            /* TURNOS — sin flip en mobile, card plana con CTA visible */
+            .turnos-grid{grid-template-columns:1fr;gap:1rem}
+            .turno-card{height:auto;transform-style:flat;cursor:default;position:relative}
+            .turno-card:hover{transform:none}
+            .tf{position:relative;transform:none;backface-visibility:visible}
+            .tb{display:none}
+            .turno-card-mobile-cta{
+                display:block;margin-top:1.1rem;text-align:center;
+                padding:.85rem 1rem;background:var(--secondary);color:var(--primary);
+                font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;
+                border-radius:8px;text-decoration:none
+            }
+            .t-hora{font-size:1.7rem}
+            .t-val{font-size:2rem}
+            /* GALERÍA — scroll horizontal tipo stories */
+            .gal-bg{overflow:hidden}
+            .galeria-grid{
+                display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+                -webkit-overflow-scrolling:touch;gap:.8rem;
+                padding:1rem 1.2rem 1.4rem;
+                grid-template-columns:unset;grid-auto-rows:unset
+            }
+            .galeria-grid::-webkit-scrollbar{display:none}
+            .galeria-item{
+                flex:0 0 76vw;height:230px;scroll-snap-align:start;
+                grid-column:unset !important;grid-row:unset !important;border-radius:14px
+            }
+            .gal-ov{opacity:1;background:linear-gradient(to top,rgba(11,61,145,.9) 0%,transparent 50%)}
+            .gal-img{transform:none !important}
+            /* TESTIMONIOS */
+            .test-track{min-height:290px}
+            .tcard{padding:1.8rem 1.2rem 1.5rem;margin-top:28px}
+            .tavatar{width:56px;height:56px;font-size:1.2rem;margin:-32px auto .8rem}
+            .ttext{font-size:.88rem}
+            /* TORNEOS */
+            .torneos-grid{grid-template-columns:1fr;gap:1rem}
+            .countdown{grid-template-columns:repeat(4,1fr);gap:.35rem}
+            .cd-val{font-size:1.35rem}
+            .cd-lbl{font-size:.55rem}
+            .torneo-card{padding:1.4rem}
+            /* CONTACTO */
+            .mapa{height:230px}
+            .ci-val{font-size:.88rem}
+            /* WA */
+            .wa{width:54px;height:54px;font-size:1.4rem;bottom:18px;right:14px}
+            .wa-tip{display:none}
+        }
+        @media(min-width:601px){
+            .turno-card-mobile-cta{display:none}
+            .gal-scroll-hint{display:none}
         }
     </style>
 </head>
@@ -240,7 +320,7 @@
 <nav class="navbar" id="navbar">
     <div class="nav-inner">
         <a class="nav-logo" href="#">
-            <img src="sanmiguel.png" alt="SM F5" onerror="this.style.display='none'">
+            <img src="logo.png" alt="SM F5" onerror="this.style.display='none'">
             <span>San Miguel F5</span>
         </a>
         <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
@@ -257,7 +337,7 @@
 <!-- HERO -->
 <div class="hero">
     <div class="hero-particles" id="particles"></div>
-    <img class="hero-logo-deco" src="sanmiguel.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
+    <img class="hero-logo-deco" src="logo.png" alt="" aria-hidden="true" onerror="this.style.display='none'">
     <div class="hero-body">
         <div class="hero-badge">⚽ Pando, Canelones · Uruguay</div>
         <h1 class="hero-title">
@@ -316,6 +396,7 @@
                 <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%208:00%20a%209:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
             </div>
         </div>
+        <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%208:00%20a%209:00%20hs" target="_blank" class="turno-card-mobile-cta">Reservar · 8:00 – 9:00</a>
 
         <div class="turno-card reveal">
             <div class="tf">
@@ -341,6 +422,7 @@
                 <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2010:00%20a%2011:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
             </div>
         </div>
+        <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2010:00%20a%2011:00%20hs" target="_blank" class="turno-card-mobile-cta">Reservar · 10:00 – 11:00</a>
 
         <div class="turno-card reveal">
             <div class="tf">
@@ -366,6 +448,7 @@
                 <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2018:00%20a%2019:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
             </div>
         </div>
+        <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2018:00%20a%2019:00%20hs" target="_blank" class="turno-card-mobile-cta">Reservar · 18:00 – 19:00</a>
 
         <div class="turno-card reveal">
             <div class="tf">
@@ -391,6 +474,7 @@
                 <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2020:00%20a%2021:00%20hs" target="_blank" class="btn btn-s" style="text-align:center">Reservar por WhatsApp</a>
             </div>
         </div>
+        <a href="https://wa.me/59896105993?text=Hola!%20Quiero%20reservar%20el%20turno%20de%2020:00%20a%2021:00%20hs" target="_blank" class="turno-card-mobile-cta">Reservar · 20:00 – 21:00</a>
 
     </div>
 </div>
@@ -399,7 +483,8 @@
 <div class="gal-bg" id="galeria">
 <div class="sw">
     <h2 class="section-title">Nuestras Instalaciones</h2>
-    <div class="galeria-grid">
+    <div class="gal-scroll-hint">← Deslizá para ver más →</div>
+        <div class="galeria-grid">
 
         <div class="galeria-item reveal">
             <img class="gal-img" src="https://scontent.fmvd3-1.fna.fbcdn.net/v/t51.82787-15/514634124_17856393972459863_5061692841422894229_n.webp?stp=dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=13d280&_nc_ohc=QodTsLzYvc0Q7kNvwGbX-FO&_nc_oc=AdmycLYDNE0BOJdwOknzRuOGoLDO8t34AfC8eX3AZq4XyyNHl0TsHh8i9rDZzREySmXlPy0VvqkitMTVDuvAkzW2&_nc_zt=23&_nc_ht=scontent.fmvd3-1.fna&_nc_gid=GKsol9FU93cpe3r3S6WWyA&_nc_ss=8&oh=00_Afz1y82aOLiNVFQZHwYkJ-dKWcrZcOpS9x-TBeEBX1mGOw&oe=69B11004" alt="Cancha Principal">
@@ -548,7 +633,7 @@
 </div>
 
 <footer>
-    <p>© 2026 La Canchita San Miguel F5 · Pando, Canelones · Hecho con <span>❤</span> por Ta!</p>
+    <p>© 2026 La Canchita San Miguel F5 · Pando, Canelones · Hecho con <span>❤</span> para los amantes del fútbol</p>
 </footer>
 
 <!-- WHATSAPP FLOTANTE -->
